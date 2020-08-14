@@ -108,7 +108,14 @@ func (a *{{{classname}}}Service) {{{nickname}}}(ctx context.Context{{#hasParams}
 	{{/required}}
 	{{^required}}
 	if localVarOptionals != nil && localVarOptionals.{{vendorExtensions.x-exportParamName}}.IsSet() {
-		localVarQueryParams.Add("{{baseName}}", parameterToString(localVarOptionals.{{vendorExtensions.x-exportParamName}}.Value(), "{{#collectionFormat}}{{collectionFormat}}{{/collectionFormat}}"))
+        if "{{collectionFormat}}" == "multi" {
+            values := parameterToStringArray(localVarOptionals.{{vendorExtensions.x-exportParamName}}.Value())
+            for _, value := range values {
+                localVarQueryParams.Add("{{baseName}}", value)
+            }
+        } else {
+            localVarQueryParams.Add("{{baseName}}", parameterToString(localVarOptionals.{{vendorExtensions.x-exportParamName}}.Value(), "{{#collectionFormat}}{{collectionFormat}}{{/collectionFormat}}"))
+        }
 	}
 	{{/required}}
 	{{/queryParams}}
