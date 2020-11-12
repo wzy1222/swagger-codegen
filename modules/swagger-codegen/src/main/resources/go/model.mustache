@@ -18,6 +18,14 @@ const (
 	{{/allowableValues}}
 ){{/isEnum}}{{^isEnum}}{{#description}}
 // {{{description}}}{{/description}}
+{{#isArrayModel}}
+type {{classname}} {{parentContainer.datatype}}
+{{/isArrayModel}}
+{{#additionalPropertiesType}}
+type {{classname}} {{additionalPropertiesType}}
+{{/additionalPropertiesType}}
+{{^additionalPropertiesType}}
+{{#dataType}}
 type {{classname}} struct {
 {{#vars}}
 {{^-first}}
@@ -27,4 +35,4 @@ type {{classname}} struct {
 {{/description}}
 	{{name}} {{^isEnum}}{{^isPrimitiveType}}{{^isContainer}}{{^isDateTime}}*{{/isDateTime}}{{/isContainer}}{{/isPrimitiveType}}{{/isEnum}}{{{datatype}}} `json:"{{baseName}}{{^required}},omitempty{{/required}}"{{#withXml}} xml:"{{baseName}}"{{/withXml}}`
 {{/vars}}
-}{{/isEnum}}{{/model}}{{/models}}
+}{{/dataType}}{{/additionalPropertiesType}}{{/isEnum}}{{/model}}{{/models}}

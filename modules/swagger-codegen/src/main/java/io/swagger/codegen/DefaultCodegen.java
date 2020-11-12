@@ -1528,7 +1528,14 @@ public class DefaultCodegen {
             }
             if (impl.getAdditionalProperties() != null) {
                 addAdditionPropertiesToCodeGenModel(m, impl);
+            }else if (m.dataType=="interface{}" && impl.getProperties() == null){
+                // 原生不支持"additionalProperties": true
+                // 原因是additionalPropertiesType字段类型是HashMap,不是string
+                // 临时做法，判断type==obj&&len(字段数)==0 但会和struct{}混淆
+                // 可以考虑将additionalPropertiesType兼容HashMap和string
+                m.additionalPropertiesType = "map[string]interface{}";
             }
+            // TODO 可以考虑支持type a XXX类型的字段
             addVars(m, impl.getProperties(), impl.getRequired(), allDefinitions);
         }
 
